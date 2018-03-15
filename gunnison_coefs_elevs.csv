@@ -1,0 +1,20 @@
+swe_start_m,,# cumulative monthly cfs
+airtemp_max_C,,"cfs_cumsum = data_all.groupby(['year','month'])['cfs'].cumsum()"
+airtemp_min_C,,data_all['cfs_cumsum'] = cfs_cumsum
+airtemp_mean_C,,4279.359817
+precip_start_m,,114914.0036
+precip_incr_m,,-2524.031406
+year,,-18837.46987
+month,,58586.83937
+stn_669_north_lost_trail,9200,8202.746035
+stn_409_columbine_pass,9400,8.085302361
+stn_618_mcclure_pass,9500,3831.446947
+stn_680_park_cone,9600,22135.36553
+stn_675_overland_reservoir,9840,-6412.458412
+stn_682_park_reservoir,9960,19582.703
+stn_622_mesa_lakes,10000,-6488.883017
+stn_1059_cochetopa_pass,10020,-13592.43668
+stn_737_schofield_pass,10700,3937.175783
+stn_701_porphyry_creek,10760,-20789.15638
+stn_762_slumgullion,11560,-4409.322938
+swe_cumsum,,131501.6367

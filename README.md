@@ -94,13 +94,52 @@ Good fit on training data ... too good
 ### split data on time range to train/test
 split on 2009
 
-![figure](figures/predict_q_traintest/gunnison_river_predict_peak_q_train+test_10st_alpha5000.png)
+![figure](/figures/predict_q_traintest/gunnison_river_predict_peak_q_train+test_10st_alpha5000.png)
 
-![figure](figures/predict_q_traintest/gunnison_river_predict_sum_q_train+test_10st_alpha5000.png)
+![figure](/figures/predict_q_traintest/gunnison_river_predict_sum_q_train+test_10st_alpha5000.png)
 
 ### after re-posing question:
 just predict cfs
 
-![figure](figures/predict_q/gunnison_river_predict_q_alpha50.png)
+![figure](/figures/predict_q/gunnison_river_predict_q_alpha50.png)
 
 baaa!!!! not the point to predict cfs for each day during the winter!!!
+
+predict sum Q for all months
+![figure](/figures/predict_q/gunnison_river_predict_sum_q_all_months.png)
+
+### test for correct alpha:
+did a k-folds-like crossval operation for timeseries: sklearn's TimeSeriesSplit
+with 30 splits
+
+tested across a range of alphas: 10**-2 to 10**8
+getting horrible errors
+![figure](/figures/alpha_tests/alpha_test_10000_records.png)
+
+but after scaling X...
+![figure](/figures/alpha_tests/alpha_test_scaled.png)
+
+optimal alpha = 2848
+
+### run ridge model with scaled X and optimal alpha
+
+model does not do a good job of predicting lower, less variable flows in winter,
+
+but it's not good at predicting the high flows in may and june when runoff is pumping.
+
+![figure](/figures/predict_q/gunnison river predict q_alpha2848.png)
+
+### assess coefficients
+pipeline: standardize and ridge regression
+
+turns out 'cfs' feature has a very high coeffiecient (duh)
+
+removed 'cfs', 'year', and 'month'
+
+features with highest influece are both aggregate quantities:
+1.total accumulated precip by a given day
+2.SWE on that given day
+
+3rd most influential feature is nightly low airtemp, which make sense cause cold nights produce less runoff
+
+![figure](/figures/coefs/coeffs_q_alpha2848.png)
