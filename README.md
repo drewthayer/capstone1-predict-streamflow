@@ -55,7 +55,7 @@ Can't predict Q from swe or air temp very well, Q is too variable.
 
 However, it looks like the upper envelope of Q for each air temp is a well-constrained relationship...
 
-![figure](/figures/gunnison_river_7stations_nobins.pdf)
+![figure](/figures/gunnison_river_7stations_nobins.png)
 
 #### binned regression:
 
@@ -69,7 +69,7 @@ y: Q
 
 for 7 stations, r2 = 0.77, not bad
 
-![figure](/figures/gunnison_river_7stations_precip.pdf)
+![figure](/figures/gunnison_river_7stations_precip.png)
 
 but the relationship is not linear
 
