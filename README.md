@@ -74,6 +74,10 @@ Fit using sklearn PolynomialFeatures and Ridge, with 6 features
 
 Model fit is really good with order 2 or 3 (R2 = 0.93, 0.96), probably over-fit...
 
+![figure](/figures/gunnison_river_7stations_nobins.png)
+
+[logo]:https://github.com/drewthayer/capstone1-predict-streamflow/blob/master/figures/poly_models_all_snotel/gunnison_river_7stations_skpoly2.png "Logo Title Text 2"
+
 ### predict q (peak, sum) from swe (peak, sum) at all stations in basin
 
 Good fit on training data ... too good
