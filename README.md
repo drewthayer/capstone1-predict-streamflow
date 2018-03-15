@@ -127,7 +127,7 @@ model does not do a good job of predicting lower, less variable flows in winter,
 
 but it's not good at predicting the high flows in may and june when runoff is pumping.
 
-![figure](/figures/predict_q/gunnison river predict q_alpha2848.png)
+![figure](/figures/predict_q/gunnison_river_predict_q_alpha2848.png)
 
 ### assess coefficients
 pipeline: standardize and ridge regression
