@@ -87,9 +87,9 @@ Model fit is really good with order 2 or 3 (R2 = 0.93, 0.96), probably over-fit.
 
 Good fit on training data ... too good
 
-![figure](/figures/predict_q/gunnison_river_predict_peak_q_impute0.png)
+![figure](/figures/predict_sumq/gunnison_river_predict_peak_q_impute0.png)
 
-![figure](/figures/predict_q/gunnison_river_predict_sum_q_impute0.png)
+![figure](/figures/predict_sumq/gunnison_river_predict_sum_q_impute0.png)
 
 ### split data on time range to train/test
 split on 2009
@@ -97,3 +97,10 @@ split on 2009
 ![figure](figures/predict_q_traintest/gunnison_river_predict_peak_q_train+test_10st_alpha5000.png)
 
 ![figure](figures/predict_q_traintest/gunnison_river_predict_sum_q_train+test_10st_alpha5000.png)
+
+### after re-posing question:
+just predict cfs
+
+![figure](figures/predict_q/gunnison_river_predict_q_alpha50.png)
+
+baaa!!!! not the point to predict cfs for each day during the winter!!!
