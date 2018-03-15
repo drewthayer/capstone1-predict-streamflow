@@ -51,12 +51,17 @@ remove records with nan values
 
 ### 3. model
 #### regression 1: all data, not very good (R2 = 0.2)
+Can't predict Q from swe or air temp very well, Q is too variable.
+
+However, it looks like the upper envelope of Q for each air temp is a well-constrained relationship...
+
+![figure](/figures/gunnison_river_7stations_nobins.png)
 
 #### binned regression:
 
-need the envelope of max potential streamflow, so bin on degrees F and extract max Q for each degree
+To get the envelope of max potential streamflow, I binned on degrees C and extract max Q for each degree
 
-(86 bins from -36F to 50F)
+(86 bins from -36F to 50F) UPDATE
 
 X: swe at start of day, min airtemp, precip at start of day
 
@@ -64,22 +69,31 @@ y: Q
 
 for 7 stations, r2 = 0.77, not bad
 
+![figure](/figures/gunnison_river_7stations_precip.pdf)
+
+but the relationship is not linear
+
 ### next step: polyomial fit
 
-relationship is not linear...
+I can fit this better with linear regression with polynomial features, using all features
 
-I can fit this better with a polynomial, using all features
-
-Fit using sklearn PolynomialFeatures and Ridge, with 6 features
+Fit using sklearn PolynomialFeatures and Ridge regression, with all 6 SNOTEL features
 
 Model fit is really good with order 2 or 3 (R2 = 0.93, 0.96), probably over-fit...
 
-![figure](/figures/gunnison_river_7stations_nobins.png)
+![figure](/figures/poly_models_all_snotel/gunnison_river_7stations_skpoly2.png)
 
-[logo]:https://github.com/drewthayer/capstone1-predict-streamflow/blob/master/figures/poly_models_all_snotel/gunnison_river_7stations_skpoly2.png "Logo Title Text 2"
-
-### predict q (peak, sum) from swe (peak, sum) at all stations in basin
+### predict q (peak, sum) from swe (peak, sum) at all 10 stations in basin
 
 Good fit on training data ... too good
 
-need to impute some values
+![figure][/figures/predict_q/gunnison_river_predict_peak_q_impute0.png]
+
+![figure][/figures/predict_q/gunnison_river_predict_sum_q_impute0.png]
+
+### split data on time range to train/test
+split on 2009
+
+![figure](figures/predict_q_traintest/gunnison_river_predict_peak_q_train+test_10st_alpha5000.png)
+
+![figure](figures/predict_q_traintest/gunnison_river_predict_sum_q_train+test_10st_alpha5000.png) 
