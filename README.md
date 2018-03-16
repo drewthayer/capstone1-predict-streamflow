@@ -7,7 +7,7 @@ Can I predict stream discharge (cubic feet per second, a.k.a. _cfs_) from snow s
 
 Data availble: USGS stream gages and NRCS SNOTEL network
 
-<img alt="alpha sensitivity test" src="/figures/co_swe_current.png" width='400'>
+<img alt="alpha sensitivity test" src="/figures/co_swe_current.png" width='500'>
 
 Preliminary look: hard to predict because discharge is variable, BUT there is a clear relationship between nightly low air temperature (at the snow stations) and max possible discharge for that day.
 
@@ -61,7 +61,7 @@ Can't predict Q from swe or air temp very well, Q is too variable.
 
 However, it looks like the **upper envelope of Q for each air temp is a well-constrained relationship...**
 
-<img alt="alpha sensitivity test" src="/figures/gunnison_river_7stations_nobins.png" width='400'>
+<img alt="alpha sensitivity test" src="/figures/gunnison_river_7stations_nobins.png" width='600'>
 
 ## Question: can you predict max potential Q as a function of nightly low air temp?
 #### model: max Q per degree C
@@ -73,7 +73,7 @@ To get the envelope of max potential streamflow, I binned on degrees C and extra
 
 for 7 stations, r2 = 0.77, not bad
 
-![figure](/figures/linear_binnedq/linear_binnedq_1.png)
+<img alt="alpha sensitivity test" src="/figures/linear_binnedq/linear_binnedq_1.png" width='500'>
 
 but the relationship is not linear...
 
@@ -96,10 +96,11 @@ Model fit is really good with order 2 or 3 (R2 = 0.93, 0.96), probably over-fit.
 
 preliminary model: not capturing the high flows in late spring very well
 
-![figure](/figures/predict_q/gunnison_river_predict_q_alpha50.png)
+<img alt="alpha sensitivity test" src="/figures/predict_q/gunnison_river_predict_q_alpha50.png" width='500'>
 
 predict sum Q for all months
-![figure](/figures/predict_q/gunnison_river_predict_sum_q_all_months.png)
+<img alt="alpha sensitivity test"
+src="/figures/predict_q/gunnison_river_predict_sum_q_all_months.png" width='500'>
 
 better prediction but I don't understand the complexity
 
@@ -110,11 +111,11 @@ with 30 splits
 Performed alpha optimization across a range of alphas: 10^-5 to 10^10
 initially getting very large errors errors
 
-<img alt="alpha sensitivity test" src="/figures/alpha_tests/alpha_test_10000_records.png" width='400'>
+<img alt="alpha sensitivity test" src="/figures/alpha_tests/alpha_test_10000_records.png" width='300'>
 
 but after standardizing and scaling X...errors got reasonable and I can pick an alpha value for the ridge regression
 
-<img alt="alpha sensitivity test" src="/figures/alpha_tests/alpha_test_scaled.png" width='400'>
+<img alt="alpha sensitivity test" src="/figures/alpha_tests/alpha_test_scaled.png" width='300'>
 
 **optimal alpha = 2848**
 This model requires a high level of regularization to perform, thus it will have a hard time predicting the peak flow behavior in late spring.
@@ -125,7 +126,7 @@ this model does not do a good job of predicting lower, less variable flows in wi
 
 but it's not good at predicting the high flows in may and june when runoff is pumping.
 
-![figure](/figures/predict_q/gunnison_river_predict_q_alpha2848.png)
+<img alt="ridge with scaled X" src="/figures/predict_q/gunnison_river_predict_q_alpha2848.png" width='500'>
 
 sure enough, it's unable to characterize those late spring peak flows
 
@@ -160,7 +161,7 @@ Reason: September snow is rare, but it happens. It is highly variable and unchar
 
 This improved the error a lot, down to an rmse error of 1325 cfs at an alpha of 559. This is a **much less regularized model**, which gives me more confidence that it can capture those spring melt magnitudes.
 
-<img alt="alpha sensitivity test" src="/final_noseptember/alpha_test_no_september.png" width='400'>
+<img alt="alpha sensitivity test" src="/final_noseptember/alpha_test_no_september.png" width='300'>
 
 ### linear model
 
@@ -176,11 +177,11 @@ The model performs well at low flows during winter and not very well during spri
 
 2nd order polynomial features:
 
-<img alt="poly model" src="/polynomial/gunnison_river_predict_streamflow_poly_2.png" width='500'>
+<img alt="poly model" src="/polynomial/gunnison_river_predict_streamflow_poly_2.png" width='600'>
 
 3rd order polynomial features:
 
-<img alt="poly model" src="/polynomial/gunnison river predict streamflow poly 3.png" width='500'>
+<img alt="poly model" src="/polynomial/gunnison river predict streamflow poly 3.png" width='600'>
 
 These models both do better at capturing the spring peaks. 3rd order does not do much better than 2nd order, so I'll apply Occam's razor and choose the 2nd order polynomial model.
 
@@ -196,4 +197,4 @@ The model performs well at low flows during winter and not very well during spri
 * use an appropriate technique for time-lagged processes
   * what we _really_ want to predict is cumulative volumes of streamflow in the summer
 * regression that takes lag-time into account
-* characterize errors: assess error as a function of flow magnitude 
+* characterize errors: assess error as a function of flow magnitude
