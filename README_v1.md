@@ -80,7 +80,7 @@ for 7 stations, r2 = 0.77, not bad
 
 but the relationship is not linear...
 
-#### next step: polyomial fit
+#### next step: linear regression with polynomial features
 
 I can fit this better with linear regression with polynomial features, using all features
 
@@ -95,33 +95,47 @@ Model fit is really good with order 2 or 3 (R2 = 0.93, 0.96), probably over-fit.
 
 #### modeling approach: predict Q from SNOTEL data aggregated from all 10 stations in basin
 
-train model on 1985 to 2016, test model on 2016, 2017, 2018 data
+#### train model on 1985 to 2016, test model on 2016, 2017, 2018 data
 
-preliminary model: not capturing the high flows in late spring very well
+Good fit on training data ... too good
+
+![figure](/figures/predict_sumq/gunnison_river_predict_peak_q_impute0.png)
+
+![figure](/figures/predict_sumq/gunnison_river_predict_sum_q_impute0.png)
+
+#### split data on time range to train/test
+split on 2009
+
+![figure](/figures/predict_q_traintest/gunnison_river_predict_peak_q_train+test_10st_alpha5000.png)
+
+![figure](/figures/predict_q_traintest/gunnison_river_predict_sum_q_train+test_10st_alpha5000.png)
+
+### after re-posing question:
+just predict cfs
 
 ![figure](/figures/predict_q/gunnison_river_predict_q_alpha50.png)
+
+baaa!!!! not the point to predict cfs for each day during the winter!!!
 
 predict sum Q for all months
 ![figure](/figures/predict_q/gunnison_river_predict_sum_q_all_months.png)
 
-better prediction but I don't understand the complexity
-
 ### test for correct alpha:
-Did a cross-validation operation for a ridge regression analagous to k-folds for timeseries: sklearn's TimeSeriesSplit
+did a k-folds-like crossval operation for timeseries: sklearn's TimeSeriesSplit
 with 30 splits
 
-tested across a range of alphas: 10^2 to 10^8
-getting very large errors errors
+tested across a range of alphas: 10**-2 to 10**8
+getting horrible errors
 ![figure](/figures/alpha_tests/alpha_test_10000_records.png)
 
-but after standardizing and scaling X...errors got reasonable and I can pick an alpha value for the ridge regression
+but after scaling X...
 ![figure](/figures/alpha_tests/alpha_test_scaled.png)
 
-**optimal alpha = 2848**
+optimal alpha = 2848
 
-### run ridge regression with scaled X and optimal alpha
+### run ridge model with scaled X and optimal alpha
 
-this model does not do a good job of predicting lower, less variable flows in winter,
+model does not do a good job of predicting lower, less variable flows in winter,
 
 but it's not good at predicting the high flows in may and june when runoff is pumping.
 
@@ -132,24 +146,23 @@ pipeline: standardize and ridge regression
 
 turns out 'cfs' feature has a very high coeffiecient (duh)
 
-removed 'cfs', 'year', and 'month'...'cfs' is not from the SNOTEL sensors, and 'year' and 'month' will correlate but not have predictive value since I want to be able to predict just from meteorological data.
+removed 'cfs', 'year', and 'month'
 
 features with highest influece are both aggregate quantities:
-1.  total accumulated precip by a given day
-2.  SWE on that given day
+1.total accumulated precip by a given day
+2.SWE on that given day
 
-3.  3rd most influential feature is nightly low airtemp, which make sense cause cold nights produce less runoff
-4.   stations, no particular pattern
-  * searched for patterns in both elevation and distance
+3rd most influential feature is nightly low airtemp, which make sense cause cold nights produce less runoff
 
 ![figure](/figures/coefs/coeffs_q_alpha2848.png)
 
-### still some outliers affecting the model
-I noticed that the model predicts variable values in September when the actual flows are quite low.
+### still some outliers
 
-Reason: September snow is rare, but it happens. It is highly variable and uncharacteristic of September weather, so I removed records from September.
+noticed variable values in september
 
-This improved the error a lot, down to an rmse error of 1325 cfs at an alpha of 559, much less regularized, which gives me more condidence in the model
+september snow is highly variable and uncharacteristic so I removed records from september
+
+this improved the error a lot, down to an rmse error of 1325 cfs at an alpha of 559, much less regularized, which gives me more condidence in the model
 
 ![figure](/final_noseptember/alpha_test_no_september.png)
 
@@ -158,9 +171,3 @@ This improved the error a lot, down to an rmse error of 1325 cfs at an alpha of 
 
 final model to predict streamflow at delta gage for last 3 years:
 ![final model](/final_noseptember/gunnison_river_predict_streamflow_rmse.png)
-
-total RMSE = 1083 cfs, which ranges between 100% and 15% model error depending on magnitude of flow
-
-## moving forward
-* use an appropriate technique for time-lagged processes
-* regression that takes lag-time into account
