@@ -7,7 +7,7 @@ Can I predict stream discharge (cubic feet per second, a.k.a. _cfs_) from snow s
 
 Data availble: USGS stream gages and NRCS SNOTEL network
 
-![figure](/figures/co_swe_current.pdf)
+<img alt="alpha sensitivity test" src="/figures/co_swe_current.png" width='400'>
 
 Preliminary look: hard to predict because discharge is variable, BUT there is a clear relationship between nightly low air temperature (at the snow stations) and max possible discharge for that day.
 
@@ -61,22 +61,19 @@ Can't predict Q from swe or air temp very well, Q is too variable.
 
 However, it looks like the **upper envelope of Q for each air temp is a well-constrained relationship...**
 
-![figure](/figures/gunnison_river_7stations_nobins.png)
+<img alt="alpha sensitivity test" src="/figures/gunnison_river_7stations_nobins.png" width='400'>
 
 ## Question: can you predict max potential Q as a function of nightly low air temp?
 #### model: max Q per degree C
 
 To get the envelope of max potential streamflow, I binned on degrees C and extract max Q for each degree
 
-(86 bins from -36F to 50F) UPDATE
+(86 bins from -04C to 18C)
 
-X: swe at start of day, min airtemp, precip at start of day
-
-y: Q
 
 for 7 stations, r2 = 0.77, not bad
 
-![figure](/figures/gunnison_river_7stations_precip.png)
+![figure](/figures/linear_binnedq/linear_binnedq_1.png)
 
 but the relationship is not linear...
 
@@ -110,7 +107,7 @@ better prediction but I don't understand the complexity
 Did a cross-validation operation for a ridge regression analagous to k-folds for timeseries: sklearn's TimeSeriesSplit
 with 30 splits
 
-tested across a range of alphas: 10^2 to 10^8
+Performed alpha optimization across a range of alphas: 10^-5 to 10^10
 initially getting very large errors errors
 
 <img alt="alpha sensitivity test" src="/figures/alpha_tests/alpha_test_10000_records.png" width='400'>
@@ -163,18 +160,40 @@ Reason: September snow is rare, but it happens. It is highly variable and unchar
 
 This improved the error a lot, down to an rmse error of 1325 cfs at an alpha of 559. This is a **much less regularized model**, which gives me more confidence that it can capture those spring melt magnitudes.
 
-![figure](/final_noseptember/alpha_test_no_september.png)
+<img alt="alpha sensitivity test" src="/final_noseptember/alpha_test_no_september.png" width='400'>
 
+### linear model
 
-### final model
-
-Final model to predict streamflow at the Delta gage in the Gunnison River for last 3 years:
+Linear model to predict streamflow at the Delta gage in the Gunnison River for last 3 years:
 ![final model](/final_noseptember/gunnison_river_predict_streamflow_rmse.png)
 
 total RMSE = 1083 cfs
 
 The model performs well at low flows during winter and not very well during spring melt and runoff.
 
+### linear model with polynomial features
+### increase complexity, try to capture the spring peaks
+
+2nd order polynomial features:
+
+<img alt="poly model" src="/polynomial/gunnison_river_predict_streamflow_poly_2.png" width='500'>
+
+3rd order polynomial features:
+
+<img alt="poly model" src="/polynomial/gunnison river predict streamflow poly 3.png" width='500'>
+
+These models both do better at capturing the spring peaks. 3rd order does not do much better than 2nd order, so I'll apply Occam's razor and choose the 2nd order polynomial model.
+
+alpha optimization for poly 2:
+
+<img alt="alpha optimization" src="/polynomial/alpha_test_poly2_5folds.png" width='400'>
+
+Not surprisingly, this requires much more regularization
+
+The model performs well at low flows during winter and not very well during spring melt and runoff.
+
 ## moving forward
 * use an appropriate technique for time-lagged processes
+  * what we _really_ want to predict is cumulative volumes of streamflow in the summer
 * regression that takes lag-time into account
+* characterize errors: assess error as a function of flow magnitude 
