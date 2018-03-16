@@ -154,7 +154,8 @@ this improved the error a lot, down to an rmse error of 1325 cfs at an alpha of 
 
 ![figure](/final_noseptember/alpha_test_no_september.png)
 
-### final model 
+
+### final model
 
 final model to predict streamflow at delta gage for last 3 years:
 
