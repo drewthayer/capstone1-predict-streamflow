@@ -189,7 +189,7 @@ alpha optimization for poly 2:
 
 <img alt="alpha optimization" src="/polynomial/alpha_test_poly2_5folds.png" width='400'>
 
-Not surprisingly, this requires much more regularization
+Not surprisingly, this requires much more regularization (linear alpha = 330, poly2 alpha > 10^5)
 
 The model performs well at low flows during winter and not very well during spring melt and runoff.
 
