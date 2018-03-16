@@ -95,7 +95,7 @@ Model fit is really good with order 2 or 3 (R2 = 0.93, 0.96), probably over-fit.
 
 #### modeling approach: predict Q from SNOTEL data aggregated from all 10 stations in basin
 
-train model on 1985 to 2016, test model on 2016, 2017, 2018 data
+#### train and test: train model on 1985 to 2016, test model on 2016, 2017, 2018 data
 
 preliminary model: not capturing the high flows in late spring very well
 
@@ -118,6 +118,7 @@ but after standardizing and scaling X...errors got reasonable and I can pick an 
 ![figure](/figures/alpha_tests/alpha_test_scaled.png)
 
 **optimal alpha = 2848**
+This model requires a high level of regularization to perform, thus it will have a hard time predicting the peak flow behavior in late spring.
 
 ### run ridge regression with scaled X and optimal alpha
 
@@ -127,20 +128,29 @@ but it's not good at predicting the high flows in may and june when runoff is pu
 
 ![figure](/figures/predict_q/gunnison_river_predict_q_alpha2848.png)
 
+sure enough, it's unable to characterize those late spring peak flows
+
 ### assess coefficients
-pipeline: standardize and ridge regression
+pipeline: standardize using StandardScalar() and Ridge regression
 
 turns out 'cfs' feature has a very high coeffiecient (duh)
 
 removed 'cfs', 'year', and 'month'...'cfs' is not from the SNOTEL sensors, and 'year' and 'month' will correlate but not have predictive value since I want to be able to predict just from meteorological data.
 
-features with highest influece are both aggregate quantities:
-1.  total accumulated precip by a given day
-2.  SWE on that given day
+features with highest influece are both aggregate quantities. The behavior of the coefficients demonstrates some of my time-domain problems
 
-3.  3rd most influential feature is nightly low airtemp, which make sense cause cold nights produce less runoff
-4.   stations, no particular pattern
-  * searched for patterns in both elevation and distance
+_(I really  need to be predicting **summer** flow from winter snow data)_
+1.  total accumulated precip by the given day
+  * very high correlation...because it rains a lot in the spring
+
+2.  SWE on the given day
+ * inverse relationship... because during the 'melt season', which generates most of the streamflow, SWE is getting lower by the day
+
+
+3.  3rd most influential feature is nightly low air temp, which make sense cause cold nights produce less runoff
+
+4.   stations, with no particular pattern
+  * I searched for patterns in both elevation and distance from the gage
 
 ![figure](/figures/coefs/coeffs_q_alpha2848.png)
 
@@ -149,17 +159,19 @@ I noticed that the model predicts variable values in September when the actual f
 
 Reason: September snow is rare, but it happens. It is highly variable and uncharacteristic of September weather, so I removed records from September.
 
-This improved the error a lot, down to an rmse error of 1325 cfs at an alpha of 559, much less regularized, which gives me more condidence in the model
+This improved the error a lot, down to an rmse error of 1325 cfs at an alpha of 559. This is a **much less regularized model**, which gives me more confidence that it can capture those spring melt magnitudes.
 
 ![figure](/final_noseptember/alpha_test_no_september.png)
 
 
 ### final model
 
-final model to predict streamflow at delta gage for last 3 years:
+Final model to predict streamflow at the Delta gage in the Gunnison River for last 3 years:
 ![final model](/final_noseptember/gunnison_river_predict_streamflow_rmse.png)
 
-total RMSE = 1083 cfs, which ranges between 100% and 15% model error depending on magnitude of flow
+total RMSE = 1083 cfs
+
+The model performs well at low flows during winter and not very well during spring melt and runoff.
 
 ## moving forward
 * use an appropriate technique for time-lagged processes
