@@ -112,12 +112,12 @@ with 30 splits
 
 tested across a range of alphas: 10^2 to 10^8
 initially getting very large errors errors
-#![figure](/figures/alpha_tests/alpha_test_10000_records.png)
 
 <img alt="alpha sensitivity test" src="/figures/alpha_tests/alpha_test_10000_records.png" width='400'>
 
 but after standardizing and scaling X...errors got reasonable and I can pick an alpha value for the ridge regression
-![figure](/figures/alpha_tests/alpha_test_scaled.png)
+
+<img alt="alpha sensitivity test" src="/figures/alpha_tests/alpha_test_scaled.png" width='400'>
 
 **optimal alpha = 2848**
 This model requires a high level of regularization to perform, thus it will have a hard time predicting the peak flow behavior in late spring.
