@@ -111,8 +111,10 @@ Did a cross-validation operation for a ridge regression analagous to k-folds for
 with 30 splits
 
 tested across a range of alphas: 10^2 to 10^8
-getting very large errors errors
-![figure](/figures/alpha_tests/alpha_test_10000_records.png)
+initially getting very large errors errors
+#![figure](/figures/alpha_tests/alpha_test_10000_records.png)
+
+<img alt="alpha sensitivity test" src="/figures/alpha_tests/alpha_test_10000_records.png" width='400'>
 
 but after standardizing and scaling X...errors got reasonable and I can pick an alpha value for the ridge regression
 ![figure](/figures/alpha_tests/alpha_test_scaled.png)
