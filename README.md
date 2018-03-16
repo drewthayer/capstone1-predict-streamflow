@@ -143,3 +143,19 @@ features with highest influece are both aggregate quantities:
 3rd most influential feature is nightly low airtemp, which make sense cause cold nights produce less runoff
 
 ![figure](/figures/coefs/coeffs_q_alpha2848.png)
+
+### still some outliers
+
+noticed variable values in september
+
+september snow is highly variable and uncharacteristic so I removed records from september
+
+this improved the error a lot, down to an rmse error of 1325 cfs at an alpha of 559, much less regularized, which gives me more condidence in the model
+
+![figure](/final_noseptember/alpha_test_no_september.png)
+
+### final model 
+
+final model to predict streamflow at delta gage for last 3 years:
+
+![figure](/final_noseptember/gunnison river predict streamflow_rmse.png)
